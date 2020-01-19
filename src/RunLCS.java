@@ -1,0 +1,219 @@
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+/**
+ *
+ * @author User
+ */
+public class RunLCS extends javax.swing.JFrame implements Runnable {
+
+    /**
+     * Creates new form RunLCS
+     */
+    //SimuLCS xx;
+    JLabel[][] grid;
+    public static int memo[][];
+    public static int path[][];
+    public static int row, col;
+    public static String lcs;
+    public static JLabel TimerLabel;
+    public void run() {
+        this.setVisible(true);
+    }
+    
+    public RunLCS(String ss, String kk) {
+        //initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
+        panel = new JPanel();
+        TimerJPanel = new JPanel();
+        TimerLabel = new JLabel("Timer: ",JLabel.CENTER);
+        this.add(panel);
+        row = ss.length();
+        col = kk.length();
+        
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.setBounds(100, 100, 500, 500);
+        panel.setLayout(new GridLayout(row + 1, col + 1));
+        TimerJPanel.setLayout(new BorderLayout());
+        TimerJPanel.add(TimerLabel);
+        this.add(TimerJPanel,BorderLayout.NORTH);
+        //
+        memo = new int[row + 2][col + 2];
+        path = new int[row + 2][col + 2];
+        for (int i = 0; i <= row; i++) {
+            memo[i][0] = 0;
+        }
+        for (int i = 0; i <= col; i++) {
+            memo[0][i] = 0;
+        }
+        for (int i = 1; i <= row; i++) {
+            for (int j = 1; j <= col; j++) {
+                if (ss.charAt(i - 1) == kk.charAt(j - 1)) {
+                    memo[i][j] = memo[i - 1][j - 1] + 1;
+                    path[i][j] = 1;
+                    /* Diagonal Way*/
+                } else if (memo[i - 1][j] >= memo[i][j - 1]) {
+                    memo[i][j] = memo[i - 1][j];
+                    path[i][j] = 2;
+                    /*Up Way*/
+                } else {
+                    memo[i][j] = memo[i][j - 1];
+                    path[i][j] = 3;
+                    /*Left Way*/
+                }
+            }
+        }
+        lcs = new String();
+        int ii = row;
+        int jj = col;
+        while (ii != 0 && jj != 0) {
+            if (path[ii][jj] == 1) {
+                lcs = ss.charAt(ii - 1) + lcs;
+                ii = ii - 1;
+                jj = jj - 1;
+            }
+            if (path[ii][jj] == 2) {
+                ii = ii - 1;
+            }
+            if (path[ii][jj] == 3) {
+                jj = jj - 1;
+            }
+        }
+        // 
+        grid = new JLabel[row + 1][col + 1];
+        for (int i = 0; i <= row; i++) {
+            for (int j = 0; j <= col; j++) {
+                grid[i][j] = new JLabel();
+                grid[i][j].setBorder(new LineBorder(Color.BLACK));
+                //grid[i][j].setBackground(Color.black);
+                grid[i][j].setOpaque(true);
+                panel.add(grid[i][j]);
+            }
+        }
+        for (int i = 1; i <= row; i++) {
+            char cc = ss.charAt(i - 1);
+            String T = new String("");
+            T = T + cc;
+            grid[i][0].setText(T);
+            grid[i][0].setFont(new Font("Serif", Font.BOLD, 30));
+        }
+        for (int i = 1; i <= col; i++) {
+            char cc = kk.charAt(i - 1);
+            String T = new String("");
+            T = T + cc;
+            grid[0][i].setText(T);
+            grid[0][i].setFont(new Font("Serif", Font.BOLD, 30));
+        }
+//        for(int i=1; i<=row; ++i)
+//        {
+//            for(int j=1; j<=col; ++j)
+//            {
+//                
+//                String k = Integer.toString(memo[i][j]);
+//                if (path[i][j] == 1) {
+//                    k = k + '\u2196';
+//                } else if (path[i][j] == 2) {
+//                    k = k + '\u2191';
+//                } else {
+//                    k = k + '\u2190';
+//                }
+//                grid[i][j].setText(k);
+//                grid[i][j].setFont(new Font("Serif", Font.BOLD, 30));
+//            }
+//        }
+        grid[0][0].setText(Integer.toString(0));
+        grid[0][0].setFont(new Font("Serif", Font.BOLD, 30));
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        panel = new javax.swing.JPanel();
+        TimerJPanel = new javax.swing.JPanel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
+        panel.setLayout(panelLayout);
+        panelLayout.setHorizontalGroup(
+            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 368, Short.MAX_VALUE)
+        );
+        panelLayout.setVerticalGroup(
+            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout TimerJPanelLayout = new javax.swing.GroupLayout(TimerJPanel);
+        TimerJPanel.setLayout(TimerJPanelLayout);
+        TimerJPanelLayout.setHorizontalGroup(
+            TimerJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        TimerJPanelLayout.setVerticalGroup(
+            TimerJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(TimerJPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(TimerJPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 200, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        // TODO add your handling code here:
+        MainFrame.pp.setEnabled(true);
+        MainFrame.pp.show();
+    }//GEN-LAST:event_formWindowClosed
+    
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel TimerJPanel;
+    private javax.swing.JPanel panel;
+    // End of variables declaration//GEN-END:variables
+}
